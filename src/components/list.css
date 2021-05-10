@@ -1,0 +1,14 @@
+.todo__item {
+    background: chocolate;
+    display: flex;
+    justify-content: space-between;
+    margin: 2px;
+    padding: 5px;
+}
+.todo__item--name{
+    flex: 1 0;
+}
+.todo__item--buttons {
+    flex: 1 0;
+    text-align: right;
+}

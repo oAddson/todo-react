@@ -1,0 +1,10 @@
+.todo {
+    display: flex;
+    justify-content: center;
+    flex: 1 0 100%;
+}
+
+.todo__container {
+    flex: 1 0;
+    max-width: 400px;
+}
