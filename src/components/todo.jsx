@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import './todo.css';
-import List from './list';
+import TaskList from './taskList';
 
 class Todo extends Component {
-    state = {  }
+
     render() { 
         return (
             <div className="todo">
                 <div className="todo__container">
                     <h2>All To-do</h2>
-                    <List />
+                    <TaskList tasks={this.props.tasks} onTick={this.props.onTick} onDelete={this.props.onDelete} />
                 </div>
             </div>
         );

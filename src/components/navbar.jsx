@@ -4,8 +4,8 @@ import './navbar.css'
 class NavBar extends Component {
     state = { tab: [
         {id: 1, label: 'Home', url: './home'},
-        {id: 2, label: 'About', url: './about'},
-        {id: 3, label: 'Contact', url: './contact'},
+        {id: 2, label: 'To-do', url: './todo'},
+        {id: 3, label: 'Tomato Timer', url: './tomato-timer'},
     ]  }
     render() {
         return (
