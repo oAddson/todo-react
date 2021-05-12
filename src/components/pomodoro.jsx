@@ -6,7 +6,7 @@ class Pomodoro extends Component {
     state = {
         timers : [
             {id: 0, endTime: 0, seconds: 300, defaultTime: 300, status: false},
-            {id: 1, endTime: 0, seconds: 900, defaultTime: 900, status: false},
+            {id: 1, endTime: 0, seconds: 600, defaultTime: 600, status: false},
             {id: 2, endTime: 0, seconds: 1500, defaultTime: 1500, status: false},
         ]
     }
@@ -39,14 +39,19 @@ class Pomodoro extends Component {
 
     handleTimer = (id) => {     
         const timers = this.state.timers.map((timer) => {
-            if (timer.id === id) {
+            if (timer.id === id) {                
                 timer.status = !timer.status;
-                timer.endTime = new Date().getTime() + (timer.defaultTime * 1000);                 
+                if (timer.seconds < timer.defaultTime) {
+                    timer.endTime = new Date().getTime() + (timer.seconds * 1000)
+                } else {
+                    timer.endTime = new Date().getTime() + (timer.defaultTime * 1000); 
+                }                                
             } else {
+                console.log('não é o id')
+                timer.seconds = timer.defaultTime;
                 if (timer.status) {
                     timer.status = false;                                     
-                }
-                timer.seconds = timer.defaultTime;
+                }                
             }        
             return timer;
         })
