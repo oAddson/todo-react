@@ -1,0 +1,21 @@
+.timer {
+    background: coral;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0;
+    max-width: 30%;
+    min-height: 150px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.timer h2 {
+    flex: 1 0 100%;
+}
+
+.timer button {
+    flex: 1 0;
+    max-width: 80%;
+}

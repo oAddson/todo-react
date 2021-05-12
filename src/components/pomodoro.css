@@ -1,0 +1,18 @@
+.pomodoro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex: 1 0 100%;
+    max-width: 800px;
+}
+
+.pomodoro h2 {
+    flex: 1 0 100%;
+    text-align: center;
+}
+
+.pomodoro .reset {
+    flex: 1 0 100%;
+    text-align: center;
+}
+

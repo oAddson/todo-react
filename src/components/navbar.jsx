@@ -5,7 +5,7 @@ class NavBar extends Component {
     state = { tab: [
         {id: 1, label: 'Home', url: './home'},
         {id: 2, label: 'To-do', url: './todo'},
-        {id: 3, label: 'Tomato Timer', url: './tomato-timer'},
+        {id: 3, label: 'Pomodoro', url: './pomodoro'},
     ]  }
     render() {
         return (

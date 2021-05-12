@@ -45,9 +45,9 @@ class Main extends Component {
     render() { 
         return (
             <main>
-                <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
-                <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} />
                 <Pomodoro />
+                <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
+                <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} />                
             </main>
         );
     }
