@@ -2,10 +2,45 @@
     flex: 1 0 100%;
     max-width: 600px;
     padding: 20px 40px;
+    border-radius: 80px;
+    box-shadow: 10px 10px 30px -20px #0e09098f, -10px -10px 30px -20px #d6d6d65c;
 }
 
 .create-todo fieldset {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    border: none;
+}
+
+.create-todo fieldset legend {
+    text-align: left;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.create-todo input {
+    background: none;
+    border: none;
+    border-bottom: 2px solid;
+    padding: 0 5px;
+    outline: greenyellow;
+}
+
+.create-todo .button {
+    margin-top: -20px;
+    flex: 0 0;
+    max-width: 50px;
+}
+
+.create-todo .button button {
+    background: none;
+    font-size: 30px;
+    font-weight: 100;
+    border: none;    
+    border-radius: 50%;
+    box-shadow: 3px 3px 14px -10px #000000bf, -3px -3px 14px -10px #eae8e8;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
 }

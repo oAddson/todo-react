@@ -7,7 +7,7 @@ class Timer extends Component {
         let {id, seconds, status} = this.props.timer;
         return (
             <div className="timer">
-                <h2> { seconds/60 < 10 ? "0" + Math.floor(seconds/60) : Math.floor(seconds/60) }:{ seconds%60 < 10 ? "0" + Math.floor(seconds%60) : Math.floor(seconds%60)  }</h2>
+                <span> { seconds/60 < 10 ? "0" + Math.floor(seconds/60) : Math.floor(seconds/60) }:{ seconds%60 < 10 ? "0" + Math.floor(seconds%60) : Math.floor(seconds%60)  }</span>
                 <button onClick={() => this.props.onClick(id)}> {!status ? "Start" : "Pause"}</button>                
             </div>
         );

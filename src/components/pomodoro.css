@@ -9,6 +9,7 @@
 .pomodoro h2 {
     flex: 1 0 100%;
     text-align: center;
+    margin: -15px 0 35px 0;
 }
 
 .pomodoro .reset {
@@ -16,3 +17,14 @@
     text-align: center;
 }
 
+.pomodoro .reset button {
+    background: none;
+    border: none;
+    flex: 1 0;
+    max-width: 80%;
+    box-shadow: 10px 10px 30px -20px #0e09098f, -10px -10px 30px -20px #d6d6d65c;
+    cursor: pointer;
+    padding: 20px 65px;
+    border-radius: 35px;
+    margin: 35px 0;
+}

@@ -12,14 +12,15 @@ class Main extends Component {
             tasks: [
                 {id: 0, name: 'task-1', status: false }
             ],
-            input: {name: '', status: false}
+            input: {name: '', status: false},
+            page: 'home'
         }
     }
     createTask = (e) => {
         e.preventDefault();
         let {name, status} = this.state.input;
         const tasks = [...this.state.tasks]
-        tasks.push({id: tasks[tasks.length-1].id + 1, name: name, status: status})
+        tasks.push({id: tasks.length ? tasks[tasks.length-1].id + 1 : 0, name: name, status: status})
         this.setState({ tasks: tasks, input: {name: '', status: false} });
     }
     handleChange = (e) => {
@@ -45,7 +46,6 @@ class Main extends Component {
     render() { 
         return (
             <main>
-                <Pomodoro />
                 <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
                 <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} />                
             </main>

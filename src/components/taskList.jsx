@@ -14,8 +14,8 @@ class List extends Component {
                         <div className={itemClass} key={task.id}>
                             <span className="todo__item--name">{task.name}</span>
                             <div className="todo__item--buttons">
-                                <button onClick={() => this.props.onTick(task.id)}>Tick</button>
-                                <button onClick={() => this.props.onDelete(task.id)}>Excluir</button>
+                                <button onClick={() => this.props.onTick(task.id)}>Check</button>
+                                <button onClick={() => this.props.onDelete(task.id)}>Delete</button>
                             </div>
                         </div>
                     )
