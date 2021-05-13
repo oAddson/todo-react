@@ -19,9 +19,11 @@ class Main extends Component {
     createTask = (e) => {
         e.preventDefault();
         let {name, status} = this.state.input;
-        const tasks = [...this.state.tasks]
-        tasks.push({id: tasks.length ? tasks[tasks.length-1].id + 1 : 0, name: name, status: status})
-        this.setState({ tasks: tasks, input: {name: '', status: false} });
+        if(name) {
+            const tasks = [...this.state.tasks]
+            tasks.push({id: tasks.length ? tasks[tasks.length-1].id + 1 : 0, name: name, status: status})
+            this.setState({ tasks: tasks, input: {name: '', status: false} });
+        }
     }
     handleChange = (e) => {
         let {name, status} = this.state.input;
