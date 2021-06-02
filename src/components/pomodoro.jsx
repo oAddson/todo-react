@@ -1,76 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Timer from './timer';
 import './pomodoro.css';
 
-class Pomodoro extends Component {
-    state = {
-        timers : [
-            {id: 0, endTime: 0, seconds: 300, defaultTime: 300, status: false},
-            {id: 1, endTime: 0, seconds: 600, defaultTime: 600, status: false},
-            {id: 2, endTime: 0, seconds: 1500, defaultTime: 1500, status: false},
-        ]
-    }
-    
-    componentDidMount() {
-        setInterval(() => {
-            console.log('interval')
-            const timers = this.state.timers.map(timer => {
-                if (timer.status) {
-                    timer.seconds = (timer.endTime - new Date().getTime())/1000;
-                    if(timer.seconds <= 0) {
-                        timer.status = false;
-                        timer.seconds = 0;
-                    }
-                }
-                return timer
-            })
-            this.setState( {timers: timers} )
-        }, 1000);
-    }
-
-    resetTimer = () => {          
-        const timers = this.state.timers.map((timer => {
-            timer.seconds = timer.defaultTime;
-            timer.status = false;
-            return timer;
-        }))
-        this.setState( {timers: timers} )
-    }
-
-    handleTimer = (id) => {     
-        const timers = this.state.timers.map((timer) => {
-            if (timer.id === id) {                
-                timer.status = !timer.status;
-                if (timer.seconds < timer.defaultTime) {
-                    timer.endTime = new Date().getTime() + (timer.seconds * 1000)
-                } else {
-                    timer.endTime = new Date().getTime() + (timer.defaultTime * 1000); 
-                }                                
-            } else {
-                console.log('não é o id')
-                timer.seconds = timer.defaultTime;
-                if (timer.status) {
-                    timer.status = false;                                     
-                }                
-            }        
-            return timer;
-        })
-        this.setState( {timers: timers} )
-    }
-    
-    render() { 
-        return (
-            <div className="pomodoro">
-                <h2>Pomodoro</h2>
-                {this.state.timers.map((timer => {
-                    return (
-                        <Timer key={timer.id} timer={timer} onClick={this.handleTimer} />
-                    );
-                }))}
-                <div className="reset"><button onClick={this.resetTimer}> Reset </button></div>
+const Pomodoro = (props) => {
+    return(
+        <div className="pomodoro">
+            <h2>Pomodoro</h2>
+            {props.timers.map((timer => {
+                return (
+                    <Timer key={timer.id} timer={timer} onClick={props.handleTimer} />
+                );
+            }))}
+            <div className="reset">
+                <button onClick={props.reset}> Reset </button>
             </div>
-        );
-    }
+        </div>
+    );
 }
- 
 export default Pomodoro;

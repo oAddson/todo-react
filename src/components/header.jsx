@@ -3,11 +3,11 @@ import NavBar from './navbar';
 import Logo from './logo';
 import './header.css'
 
-const Header = () => {
+const Header = (props) => {
     return (
         <header className="header">
             <Logo />
-            <NavBar />
+            <NavBar setTab={ props.setTab } />
         </header>
     );
 }

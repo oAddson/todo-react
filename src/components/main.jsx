@@ -12,10 +12,66 @@ class Main extends Component {
             tasks: [
                 {id: 0, name: 'task-1', status: false }
             ],
+            timers : [
+                {id: 0, endTime: 0, seconds: 300, defaultTime: 300, status: false},
+                {id: 1, endTime: 0, seconds: 600, defaultTime: 600, status: false},
+                {id: 2, endTime: 0, seconds: 1500, defaultTime: 1500, status: false},
+            ],
             input: {name: '', status: false},
             page: 'home'
         }
     }
+
+    componentDidMount() {
+        setInterval(() => {
+            const timers = this.state.timers.map(timer => {
+                if (timer.status) {
+                    timer.seconds = (timer.endTime - new Date().getTime())/1000;
+                    if(timer.seconds <= 0) {
+                        timer.status = false;
+                        timer.seconds = 0;
+                    }
+                }
+                return timer
+            })
+            this.setState( {timers: timers} )
+        }, 1000);
+    }
+
+    resetTimer = () => {       
+        console.log('reset')   
+        const timers = this.state.timers.map((timer => {
+            timer.seconds = timer.defaultTime;
+            timer.status = false;
+            return timer;
+        }))
+        this.setState( {timers: timers} )
+    }
+
+    handleTimer = (id) => {     
+        const timers = this.state.timers.map((timer) => {
+            if (timer.id === id) {                
+                timer.status = !timer.status;
+                if (timer.seconds < timer.defaultTime) {
+                    if(timer.seconds === 0) {
+                        this.resetTimer();
+                    } else {
+                        timer.endTime = new Date().getTime() + (timer.seconds * 1000)
+                    }
+                } else {
+                    timer.endTime = new Date().getTime() + (timer.defaultTime * 1000); 
+                }                            
+            } else {
+                timer.seconds = timer.defaultTime;
+                if (timer.status) {
+                    timer.status = false;                                     
+                }                
+            }        
+            return timer;
+        })
+        this.setState( {timers: timers} )
+    }
+    
     createTask = (e) => {
         e.preventDefault();
         let {name, status} = this.state.input;
@@ -45,11 +101,27 @@ class Main extends Component {
         this.setState( {tasks: tasks} )
     }
 
-    render() { 
+    render() {
+        const tab = () => {
+            switch (this.props.tab) {
+                case 1:
+                    return (<div>Home</div>);
+                case 2:
+                    return (
+                        <React.Fragment>
+                            <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
+                            <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} /> 
+                        </React.Fragment>
+                    );
+                case 3:
+                    return (<Pomodoro timers={this.state.timers} reset={this.resetTimer} handleTimer={this.handleTimer} />);
+                default:
+                    return (<div>Tab not found</div>);
+            }
+        }
         return (
             <main>
-                <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
-                <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} />                
+                { tab() }
             </main>
         );
     }

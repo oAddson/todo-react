@@ -4,12 +4,20 @@ import Header from './components/header';
 import Main from './components/main';
 
 class App extends Component {
-  state = {  }
-  render() { 
+  state = {
+    tab: 1
+  }
+
+  handleTab = (e, id) => {    
+    e.preventDefault();
+    this.setState({tab : id})
+  }
+
+  render() {
     return (
       <div className="App">
-        <Header/>
-        <Main />
+        <Header setTab={this.handleTab}/>
+        <Main tab={this.state.tab} />
       </div>
     );
   }
