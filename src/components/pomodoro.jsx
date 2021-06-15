@@ -1,18 +1,13 @@
 import React from 'react';
-import Timer from './timer';
 import './pomodoro.css';
 
-const Pomodoro = (props) => {
+const Pomodoro = ({children, reset}) => {
     return(
         <div className="pomodoro">
             <h2>Pomodoro</h2>
-            {props.timers.map((timer => {
-                return (
-                    <Timer key={timer.id} timer={timer} onClick={props.handleTimer} />
-                );
-            }))}
+            {children}
             <div className="reset">
-                <button onClick={props.reset}> Reset </button>
+                <button onClick={reset}> Reset </button>
             </div>
         </div>
     );
