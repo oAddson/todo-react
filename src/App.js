@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {  BrowserRouter as Router   } from "react-router-dom";
 import './App.css';
 import Header from './components/header';
 import Main from './components/main';
@@ -15,10 +16,12 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Header setTab={this.handleTab}/>
-        <Main tab={this.state.tab} />
-      </div>
+      <Router>
+        <div className="App">
+          <Header setTab={this.handleTab}/>
+          <Main tab={this.state.tab} />
+        </div>
+      </Router>
     );
   }
 }
