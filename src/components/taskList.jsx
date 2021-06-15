@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './taskList.css';
 
-class List extends Component {
-    render() {      
-        return (
-            <React.Fragment>
-                {this.props.tasks.map(task => {
-                    let itemClass = "todo__item"
-                    if (task.status) {
-                        itemClass+= " --active";
-                    }
-                    return (
-                        <div className={itemClass} key={task.id}>
-                            <span className="todo__item--name">{task.name}</span>
-                            <div className="todo__item--buttons">
-                                <button onClick={() => this.props.onTick(task.id)}>Check</button>
-                                <button onClick={() => this.props.onDelete(task.id)}>Delete</button>
-                            </div>
+const List = ({tasks, onDelete, onTick}) => {
+    return (
+        <>
+            {tasks.map(task => {
+                const {id, status, name} = task;
+                let itemClass = "todo__item"
+                if (status) {
+                    itemClass+= " --active";
+                }
+                return (
+                    <div className={itemClass} key={id}>
+                        <span className="todo__item--name">{name}</span>
+                        <div className="todo__item--buttons">
+                            <button onClick={() => onTick(id)}>Check</button>
+                            <button onClick={() => onDelete(id)}>Delete</button>
                         </div>
-                    )
-                })}
-            </React.Fragment>
-        );
-    }
+                    </div>
+                )
+            })}
+        </>
+    );
 }
  
 export default List;
