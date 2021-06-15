@@ -1,130 +1,162 @@
-import React, { Component } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Home from './home'
 import Form from './form';
 import Todo from './todo';
-import Pomodoro from './pomodoro'
+import Pomodoro from './pomodoro';
+import Timer from './timer';
+import MiniTimer from './miniTimer';
+import Input from './input';
 import './main.css';
 
+function reducer (state, action) {
+    switch (action.type) {
+        case 'ADD_TASK':
+            if (action.payload.name) {
+                return {...state, tasks: [...state.tasks, action.payload]};
+            }
+            return {...state}
+        case 'REMOVE_TASK':
+            const newTasks = state.tasks.filter(task => task.id !== action.payload)
+            return {...state, tasks: [...newTasks]}
+        case 'TICK_TASK':
+            const newTickedTasks = state.tasks.map(task => {return task.id === action.payload ? {...task, status: !task.status} : task})
+            return {...state, tasks: [...newTickedTasks]};
+        default:
+            throw new Error();
+    }
+}
 
-class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tasks: [
-                {id: 0, name: 'task-1', status: false }
-            ],
-            timers : [
-                {id: 0, endTime: 0, seconds: 300, defaultTime: 300, status: false},
-                {id: 1, endTime: 0, seconds: 600, defaultTime: 600, status: false},
-                {id: 2, endTime: 0, seconds: 1500, defaultTime: 1500, status: false},
-            ],
-            input: {name: '', status: false},
-            page: 'home'
-        }
+const initialTimers = [
+    {id: 0, status: false, defaultTime: 300, final: 0, seconds: 300},
+    {id: 1, status: false, defaultTime: 600, final: 0, seconds: 600},
+    {id: 2, status: false, defaultTime: 1500, final: 0, seconds: 1500}
+]
+
+const Main = () => {
+    const [name, setName] = useState('');
+    const [status, setStatus] = useState(false);
+    const [state, dispatch] = useReducer(reducer, {tasks: []});
+    const [timers, setTimers] = useState(initialTimers);
+
+    const handleCreateTask = (e) => {
+        e.preventDefault();
+        dispatch({type: "ADD_TASK", payload: {id: new Date().getTime(), name, status}});
+        setName('');
+        setStatus(false);
     }
 
-    componentDidMount() {
-        setInterval(() => {
-            const timers = this.state.timers.map(timer => {
-                if (timer.status) {
-                    timer.seconds = (timer.endTime - new Date().getTime())/1000;
-                    if(timer.seconds <= 0) {
-                        timer.status = false;
-                        timer.seconds = 0;
-                    }
-                }
-                return timer
-            })
-            this.setState( {timers: timers} )
-        }, 1000);
+    const handleDeleteTask = (id) => {
+        dispatch({type: "REMOVE_TASK", payload: id})
     }
 
-    resetTimer = () => {       
-        console.log('reset')   
-        const timers = this.state.timers.map((timer => {
-            timer.seconds = timer.defaultTime;
-            timer.status = false;
-            return timer;
-        }))
-        this.setState( {timers: timers} )
+    const handleTick = (id) => {
+        dispatch({type: "TICK_TASK", payload: id})
     }
-
-    handleTimer = (id) => {     
-        const timers = this.state.timers.map((timer) => {
-            if (timer.id === id) {                
-                timer.status = !timer.status;
-                if (timer.seconds < timer.defaultTime) {
-                    if(timer.seconds === 0) {
-                        this.resetTimer();
-                    } else {
-                        timer.endTime = new Date().getTime() + (timer.seconds * 1000)
-                    }
-                } else {
-                    timer.endTime = new Date().getTime() + (timer.defaultTime * 1000); 
-                }                            
-            } else {
-                timer.seconds = timer.defaultTime;
-                if (timer.status) {
-                    timer.status = false;                                     
+    /* 
+    const handleTimer = (id) => {
+        const newTimers = timers.map(timer => {
+            if(timer.id === id) {
+                const final = (new Date().getTime()/1000) + timer.seconds;
+                if(timer.seconds <= 0) {
+                    return {...timer, final: final, seconds : timer.defaultTime};
                 }                
-            }        
-            return timer;
+                return {...timer, final: final, status: !timer.status}
+            } 
+            return {...timer, seconds : timer.defaultTime, status: false};
         })
-        this.setState( {timers: timers} )
+        setTimers([...newTimers])
+    }
+    */
+    const handleTimer = (id) => {
+        const newTimers = timers.map(timer => {
+            if(timer.id ===id) {
+                timer.final = (new Date().getTime()/1000) + timer.seconds;
+                timer.status = !timer.status;
+                return {...timer}
+            }
+            return {...timer, status: false};
+        })
+        setTimers([...newTimers])
     }
     
-    createTask = (e) => {
-        e.preventDefault();
-        let {name, status} = this.state.input;
-        if(name) {
-            const tasks = [...this.state.tasks]
-            tasks.push({id: tasks.length ? tasks[tasks.length-1].id + 1 : 0, name: name, status: status})
-            this.setState({ tasks: tasks, input: {name: '', status: false} });
-        }
-    }
-    handleChange = (e) => {
-        let {name, status} = this.state.input;
-        e.target.name === 'name' ? name = e.target.value : status = e.target.checked;
-        this.setState({ input: {name: name, status: status} });
-    }
-    handleDelete = (taskId) => {
-        const tasks = this.state.tasks.filter(task => task.id !== taskId);
-        this.setState( {tasks: tasks} )
-        
-    }
-    handleTick = (taskId) => {
-        const tasks = this.state.tasks.map(task => {
-            if (task.id === taskId) {
-                task.status = !task.status;
+    const resetTimer = (id) => {
+        const newTimers = timers.map(timer => {
+            if(timer.id ===id) {
+                timer.seconds = timer.defaultTime;
+                timer.status = false;
             }
-            return task;
+            return timer;
         })
-        this.setState( {tasks: tasks} )
+        setTimers([...newTimers])
     }
 
-    render() {
-        const tab = () => {
-            switch (this.props.tab) {
-                case 1:
-                    return (<div>Home</div>);
-                case 2:
-                    return (
-                        <React.Fragment>
-                            <Form values={this.state.input} onChange={this.handleChange} onClick={this.createTask} />
-                            <Todo tasks={this.state.tasks} onTick={this.handleTick} onDelete={this.handleDelete} /> 
-                        </React.Fragment>
-                    );
-                case 3:
-                    return (<Pomodoro timers={this.state.timers} reset={this.resetTimer} handleTimer={this.handleTimer} />);
-                default:
-                    return (<div>Tab not found</div>);
-            }
-        }
-        return (
-            <main>
-                { tab() }
-            </main>
-        );
+    const handleReset = () => {
+        const newTimers = timers.map(timer => {
+            timer.status = false;
+            timer.seconds = timer.defaultTime;
+            return timer;
+        })
+        setTimers([...newTimers])
     }
+
+    useEffect(() => {
+        const countdown = setInterval(() => {
+            let equal = true;
+            const newTimers = timers.map(timer => {
+                if(timer.status && timer.seconds >= 1) {
+                    timer.seconds = timer.final - (new Date().getTime()/1000);
+                    equal = false;
+                    return timer;
+                }
+                timer.status = false;
+                return timer;
+            })
+            if(equal) {
+                clearInterval(countdown)
+            } else {
+                console.log('alou')
+                setTimers([...newTimers])
+            }
+        }, 100);
+        return () => {
+            clearInterval(countdown);
+        }
+    }, [timers])
+    
+    return (
+        <>
+        <MiniTimer {...timers} />
+        <main>
+        <Switch>            
+            <Route exact path="/">
+                <Home />
+            </Route>
+            <Route path="/todo">
+                <Form> 
+                    <fieldset>
+                        <legend>Create to-do</legend>                    
+                        <Input label="Name: " type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <Input label="Done: " type="checkbox" name="done" id="done" checked={status} onChange={() => setStatus(!status)} />
+                        <div className="button">
+                            <button type="submit" onClick={(e) => handleCreateTask(e)}>+</button>
+                        </div>                    
+                    </fieldset>
+                </Form>
+                {state.tasks.length > 0 && <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
+            </Route>
+            <Route path="/pomodoro">
+                <Pomodoro reset={handleReset}>
+                    {timers.map(timer => <Timer key={timer.id} {...timer} resetTimer={resetTimer} handleTimer={handleTimer} />)}                     
+                </Pomodoro>
+            </Route>
+            <Route path="*">
+                <h1>Error 404</h1>
+            </Route>            
+        </Switch>
+        </main>
+        </>
+    );
 }
  
 export default Main;
