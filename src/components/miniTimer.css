@@ -1,0 +1,11 @@
+.mini-timer {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    font-family: 'Major Mono Display', monospace;
+    font-size: 35px;
+    text-shadow: 2px 2px 10px #353633, -2px -2px 10px greenyellow, -2px 2px 10px greenyellow, 2px -2px 10px greenyellow, 0px 1px 1px greenyellow;
+    border-radius: 35px;
+    box-shadow: 10px 10px 30px -17px #0e09098f, -10px -10px 25px -20px #d6d6d65c;
+    padding: 15px 35px;
+}

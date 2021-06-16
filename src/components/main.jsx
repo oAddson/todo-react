@@ -53,21 +53,7 @@ const Main = () => {
     const handleTick = (id) => {
         dispatch({type: "TICK_TASK", payload: id})
     }
-    /* 
-    const handleTimer = (id) => {
-        const newTimers = timers.map(timer => {
-            if(timer.id === id) {
-                const final = (new Date().getTime()/1000) + timer.seconds;
-                if(timer.seconds <= 0) {
-                    return {...timer, final: final, seconds : timer.defaultTime};
-                }                
-                return {...timer, final: final, status: !timer.status}
-            } 
-            return {...timer, seconds : timer.defaultTime, status: false};
-        })
-        setTimers([...newTimers])
-    }
-    */
+   
     const handleTimer = (id) => {
         const newTimers = timers.map(timer => {
             if(timer.id ===id) {
@@ -125,12 +111,12 @@ const Main = () => {
     }, [timers])
     
     return (
-        <>
-        <MiniTimer {...timers} />
+        <>        
         <main>
         <Switch>            
             <Route exact path="/">
                 <Home />
+                <MiniTimer timers={timers} />
             </Route>
             <Route path="/todo">
                 <Form> 
@@ -144,6 +130,7 @@ const Main = () => {
                     </fieldset>
                 </Form>
                 {state.tasks.length > 0 && <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
+                <MiniTimer timers={timers} />
             </Route>
             <Route path="/pomodoro">
                 <Pomodoro reset={handleReset}>
