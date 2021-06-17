@@ -13,14 +13,17 @@ function reducer (state, action) {
     switch (action.type) {
         case 'ADD_TASK':
             if (action.payload.name) {
+                localStorage.setItem('@todo-list/todos', JSON.stringify([...state.tasks, action.payload]))
                 return {...state, tasks: [...state.tasks, action.payload]};
             }
             return {...state}
         case 'REMOVE_TASK':
             const newTasks = state.tasks.filter(task => task.id !== action.payload)
+            localStorage.setItem('@todo-list/todos', JSON.stringify([...newTasks]))
             return {...state, tasks: [...newTasks]}
         case 'TICK_TASK':
             const newTickedTasks = state.tasks.map(task => {return task.id === action.payload ? {...task, status: !task.status} : task})
+            localStorage.setItem('@todo-list/todos', JSON.stringify([...newTickedTasks]))
             return {...state, tasks: [...newTickedTasks]};
         default:
             throw new Error();
@@ -33,10 +36,12 @@ const initialTimers = [
     {id: 2, status: false, defaultTime: 1500, final: 0, seconds: 1500}
 ]
 
+const initialState = {tasks: JSON.parse(localStorage.getItem('@todo-list/todos')) || []};
+
 const Main = () => {
     const [name, setName] = useState('');
     const [status, setStatus] = useState(false);
-    const [state, dispatch] = useReducer(reducer, {tasks: []});
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [timers, setTimers] = useState(initialTimers);
 
     const handleCreateTask = (e) => {
