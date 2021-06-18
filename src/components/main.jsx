@@ -8,6 +8,7 @@ import Timer from './timer';
 import MiniTimer from './miniTimer';
 import Input from './input';
 import './main.css';
+import sound from '../assets/audio/success.mp3';
 
 function reducer (state, action) {
     switch (action.type) {
@@ -62,6 +63,10 @@ const Main = () => {
     const handleTimer = (id) => {
         const newTimers = timers.map(timer => {
             if(timer.id ===id) {
+                if(timer.seconds <= 1) {
+                    timer.seconds = timer.defaultTime;
+                    return {...timer};
+                }
                 timer.final = (new Date().getTime()/1000) + timer.seconds;
                 timer.status = !timer.status;
                 return {...timer}
@@ -95,10 +100,15 @@ const Main = () => {
         const countdown = setInterval(() => {
             let equal = true;
             const newTimers = timers.map(timer => {
-                if(timer.status && timer.seconds >= 1) {
-                    timer.seconds = timer.final - (new Date().getTime()/1000);
-                    equal = false;
-                    return timer;
+                if(timer.status) {
+                    if(timer.seconds >= 1) { 
+                        timer.seconds = timer.final - (new Date().getTime()/1000);
+                        equal = false;
+                        return timer;
+                    } else {
+                        const alert = new Audio(sound)
+                        alert.play();
+                    }
                 }
                 timer.status = false;
                 return timer;
