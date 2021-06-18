@@ -7,6 +7,7 @@ import Pomodoro from './pomodoro';
 import Timer from './timer';
 import MiniTimer from './miniTimer';
 import Input from './input';
+import Modal from './modal';
 import './main.css';
 import sound from '../assets/audio/success.mp3';
 
@@ -44,16 +45,19 @@ const Main = () => {
     const [status, setStatus] = useState(false);
     const [state, dispatch] = useReducer(reducer, initialState);
     const [timers, setTimers] = useState(initialTimers);
+    const [modal, setModal] = useState({status: false, message: ''});
 
     const handleCreateTask = (e) => {
         e.preventDefault();
         dispatch({type: "ADD_TASK", payload: {id: new Date().getTime(), name, status}});
         setName('');
         setStatus(false);
+        setModal({status: true, message: 'To-do Created!', time: 1});
     }
 
     const handleDeleteTask = (id) => {
         dispatch({type: "REMOVE_TASK", payload: id})
+        setModal({status: true, message: 'To-do Removed!', time: 1});
     }
 
     const handleTick = (id) => {
@@ -126,14 +130,19 @@ const Main = () => {
     }, [timers])
     
     return (
-        <>        
-        <main>
+        <>
+        <main>        
         <Switch>            
             <Route exact path="/">
                 <Home />
                 <MiniTimer timers={timers} />
             </Route>
-            <Route path="/todo">
+            <Route exact path="/todo">
+                {
+                    modal.status && <Modal {...modal} toggle={() => setModal({...modal, status: false})}>
+                        {modal.message}
+                    </Modal>
+                }
                 <Form> 
                     <fieldset>
                         <legend>Create to-do</legend>                    
@@ -141,11 +150,14 @@ const Main = () => {
                         <Input label="Done: " type="checkbox" name="done" id="done" checked={status} onChange={() => setStatus(!status)} />
                         <div className="button">
                             <button type="submit" onClick={(e) => handleCreateTask(e)}>+</button>
-                        </div>                    
+                        </div>                
                     </fieldset>
                 </Form>
                 {state.tasks.length > 0 && <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
                 <MiniTimer timers={timers} />
+            </Route>
+            <Route path="/todo/:id">
+                'alou'
             </Route>
             <Route path="/pomodoro">
                 <Pomodoro reset={handleReset}>
