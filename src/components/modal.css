@@ -1,0 +1,39 @@
+.overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(35,35,35,0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 0;
+    max-width: 50%;
+    min-height: 120px;
+    position: relative;
+    border-radius: 35px;
+    backdrop-filter: blur(10px);
+    box-shadow: 10px 10px 30px -20px #0e09098f, -10px -10px 25px -25px #d6d6d65c;
+}
+
+.close {
+    position: absolute;
+    background: none;
+    border: none;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.modal .content {
+    margin: 30px 100px;
+}
