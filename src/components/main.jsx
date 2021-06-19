@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Home from './home'
 import Form from './form';
 import Todo from './todo';
@@ -33,6 +33,8 @@ function reducer (todos, action) {
     }
 }
 
+const initialInput = {name: '', status: false, description: '', category: ''};
+
 const initialTimers = [
     {id: 0, status: false, defaultTime: 300, final: 0, seconds: 300},
     {id: 1, status: false, defaultTime: 600, final: 0, seconds: 600},
@@ -42,17 +44,17 @@ const initialTimers = [
 const initialtodos = {tasks: JSON.parse(localStorage.getItem('@todo-list/todos')) || []};
 
 const Main = () => {
-    const [name, setName] = useState('');
-    const [status, setStatus] = useState(false);
+    const [input, setInput] = useState(initialInput);
     const [todos, dispatch] = useReducer(reducer, initialtodos);
     const [timers, setTimers] = useState(initialTimers);
+    const [details, setDetails] = useState(false)
     const [modal, setModal] = useState({status: false, message: ''});
 
     const handleCreateTask = (e) => {
         e.preventDefault();
-        dispatch({type: "ADD_TASK", payload: {id: new Date().getTime(), name, status}});
-        setName('');
-        setStatus(false);
+        dispatch({type: "ADD_TASK", payload: {id: new Date().getTime(), ...input}});
+        setInput(initialInput);
+        setDetails(false)
         setModal({status: true, message: 'To-do Created!', time: 1});
     }
 
@@ -147,11 +149,20 @@ const Main = () => {
                 <Form> 
                     <fieldset>
                         <legend>Create to-do</legend>                    
-                        <Input label="Name: " type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-                        <Input label="Done: " type="checkbox" name="done" id="done" checked={status} onChange={() => setStatus(!status)} />
+                        <Input label="Name: " type="text" name="name" id="name" value={input.name} onChange={(e) => setInput({...input, name: e.target.value})} />
+                        <Input label="Done: " type="checkbox" name="done" id="done" checked={input.status} onChange={() => setInput({...input, status: !input.status})} />
+                        <Input label="More: " type="checkbox" name="details" id="details" checked={details} onChange={() => setDetails(!details)} />
                         <div className="button">
                             <button type="submit" onClick={(e) => handleCreateTask(e)}>+</button>
-                        </div>                
+                        </div>
+                        {
+                            details && (
+                                <>
+                                <Input label="Description: " type="description" name="description" id="description" value={input.description} onChange={(e) => setInput({...input, description: e.target.value})} />
+                                <Input label="Category: " type="category" name="category" id="category" value={input.category} onChange={(e) => setInput({...input, category: e.target.value})} />
+                                </>
+                            )
+                        }           
                     </fieldset>
                 </Form>
                 {todos.tasks.length > 0 && <Todo tasks={todos.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
