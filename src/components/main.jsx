@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useParams } from 'react-router-dom';
 import Home from './home'
 import Form from './form';
 import Todo from './todo';
@@ -10,23 +10,24 @@ import Input from './input';
 import Modal from './modal';
 import './main.css';
 import sound from '../assets/audio/success.mp3';
+import TodoSingle from './todoSingle';
 
-function reducer (state, action) {
+function reducer (todos, action) {
     switch (action.type) {
         case 'ADD_TASK':
             if (action.payload.name) {
-                localStorage.setItem('@todo-list/todos', JSON.stringify([...state.tasks, action.payload]))
-                return {...state, tasks: [...state.tasks, action.payload]};
+                localStorage.setItem('@todo-list/todos', JSON.stringify([...todos.tasks, action.payload]))
+                return {...todos, tasks: [...todos.tasks, action.payload]};
             }
-            return {...state}
+            return {...todos}
         case 'REMOVE_TASK':
-            const newTasks = state.tasks.filter(task => task.id !== action.payload)
+            const newTasks = todos.tasks.filter(task => task.id !== action.payload)
             localStorage.setItem('@todo-list/todos', JSON.stringify([...newTasks]))
-            return {...state, tasks: [...newTasks]}
+            return {...todos, tasks: [...newTasks]}
         case 'TICK_TASK':
-            const newTickedTasks = state.tasks.map(task => {return task.id === action.payload ? {...task, status: !task.status} : task})
+            const newTickedTasks = todos.tasks.map(task => {return task.id === action.payload ? {...task, status: !task.status} : task})
             localStorage.setItem('@todo-list/todos', JSON.stringify([...newTickedTasks]))
-            return {...state, tasks: [...newTickedTasks]};
+            return {...todos, tasks: [...newTickedTasks]};
         default:
             throw new Error();
     }
@@ -38,12 +39,12 @@ const initialTimers = [
     {id: 2, status: false, defaultTime: 1500, final: 0, seconds: 1500}
 ]
 
-const initialState = {tasks: JSON.parse(localStorage.getItem('@todo-list/todos')) || []};
+const initialtodos = {tasks: JSON.parse(localStorage.getItem('@todo-list/todos')) || []};
 
 const Main = () => {
     const [name, setName] = useState('');
     const [status, setStatus] = useState(false);
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [todos, dispatch] = useReducer(reducer, initialtodos);
     const [timers, setTimers] = useState(initialTimers);
     const [modal, setModal] = useState({status: false, message: ''});
 
@@ -153,11 +154,11 @@ const Main = () => {
                         </div>                
                     </fieldset>
                 </Form>
-                {state.tasks.length > 0 && <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
+                {todos.tasks.length > 0 && <Todo tasks={todos.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
                 <MiniTimer timers={timers} />
             </Route>
             <Route path="/todo/:id">
-                'alou'
+                <TodoSingle {...todos} />
             </Route>
             <Route path="/pomodoro">
                 <Pomodoro reset={handleReset}>
