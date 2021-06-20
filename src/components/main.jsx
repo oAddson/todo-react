@@ -123,7 +123,6 @@ const Main = () => {
             if(equal) {
                 clearInterval(countdown)
             } else {
-                console.log('alou')
                 setTimers([...newTimers])
             }
         }, 100);
@@ -137,8 +136,7 @@ const Main = () => {
         <main>        
         <Switch>            
             <Route exact path="/">
-                <Home />
-                <MiniTimer timers={timers} />
+                <Home />                
             </Route>
             <Route exact path="/todo">
                 {
@@ -157,19 +155,18 @@ const Main = () => {
                         </div>
                         {
                             details && (
-                                <>
-                                <Input label="Description: " type="description" name="description" id="description" value={input.description} onChange={(e) => setInput({...input, description: e.target.value})} />
-                                <Input label="Category: " type="category" name="category" id="category" value={input.category} onChange={(e) => setInput({...input, category: e.target.value})} />
-                                </>
+                                <div>
+                                    <Input label="Description: " type="description" name="description" id="description" value={input.description} onChange={(e) => setInput({...input, description: e.target.value})} />
+                                    <Input label="Category: " type="category" name="category" id="category" value={input.category} onChange={(e) => setInput({...input, category: e.target.value})} />
+                                </div>
                             )
                         }           
                     </fieldset>
                 </Form>
                 {todos.tasks.length > 0 && <Todo tasks={todos.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
-                <MiniTimer timers={timers} />
             </Route>
             <Route path="/todo/:id">
-                <TodoSingle {...todos} />
+                <TodoSingle handleTick={handleTick} {...todos} />
             </Route>
             <Route path="/pomodoro">
                 <Pomodoro reset={handleReset}>
@@ -178,8 +175,9 @@ const Main = () => {
             </Route>
             <Route path="*">
                 <h1>Error 404</h1>
-            </Route>            
+            </Route>       
         </Switch>
+        <MiniTimer timers={timers} />
         </main>
         </>
     );

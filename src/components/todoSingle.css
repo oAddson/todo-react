@@ -1,0 +1,31 @@
+.todo-single {
+    box-shadow: 10px 10px 30px -20px #0e09098f, -10px -10px 30px -20px #d6d6d65c;
+    border-radius: 35px;
+    flex: 1 0;
+    max-width: 75%;
+    padding: 45px;
+    text-align: left;
+}
+
+.category {
+    font-size: 24px;
+}
+
+.title {
+    font-size: 35px;
+    line-height: 1;
+}
+
+.description {
+    padding: 25px 0px;
+}
+
+.todo-single button {
+    background: #003366;
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 7px -4px #0e09098f, -2px -2px 7px -3px #d6d6d65c;
+}
