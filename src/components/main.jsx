@@ -10,6 +10,7 @@ import Input from './input';
 import Modal from './modal';
 import './main.css';
 import sound from '../assets/audio/success.mp3';
+import click from '../assets/audio/click.wav';
 import TodoSingle from './todoSingle';
 
 function reducer (todos, action) {
@@ -70,14 +71,17 @@ const Main = () => {
     const handleTimer = (id) => {
         const newTimers = timers.map(timer => {
             if(timer.id ===id) {
+                new Audio(click).play()
                 if(timer.seconds <= 1) {
                     timer.seconds = timer.defaultTime;
                     return {...timer};
                 }
                 timer.final = (new Date().getTime()/1000) + timer.seconds;
                 timer.status = !timer.status;
+                
                 return {...timer}
             }
+            document.title = !timer.status && 'To-do';
             return {...timer, status: false};
         })
         setTimers([...newTimers])
@@ -111,8 +115,10 @@ const Main = () => {
                     if(timer.seconds >= 1) { 
                         timer.seconds = timer.final - (new Date().getTime()/1000);
                         equal = false;
+                        document.title = (timer.seconds/60 < 10 ? "0" + Math.floor(timer.seconds/60) : Math.floor(timer.seconds/60)) + ':' + (timer.seconds%60 < 10 ? "0" + Math.floor(timer.seconds%60) : Math.floor(timer.seconds%60));
                         return timer;
                     } else {
+                        document.title = 'To-do'
                         const alert = new Audio(sound)
                         alert.play();
                     }
