@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './timer.css';
 
 const Timer = ({id, seconds, status, handleTimer, resetTimer}) => {
