@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './home'
 import Form from './form';
 import Todo from './todo';
@@ -117,36 +117,52 @@ const Main = () => {
     
     return (
         <>        
-        <main>
-        <Switch>            
-            <Route exact path="/">
-                <Home />
-                <MiniTimer timers={timers} />
-            </Route>
-            <Route path="/todo">
-                <Form> 
+          <main>
+          <Routes>            
+            <Route 
+              path="/" 
+              element={
+                <>
+                  <Home />
+                  <MiniTimer timers={timers} />
+                </>
+              } 
+            />
+            <Route 
+              path="/todo" 
+              element={
+                <>
+                  <Form> 
                     <fieldset>
-                        <legend>Create to-do</legend>                    
-                        <Input label="Name: " type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-                        <Input label="Done: " type="checkbox" name="done" id="done" checked={status} onChange={() => setStatus(!status)} />
-                        <div className="button">
-                            <button type="submit" onClick={(e) => handleCreateTask(e)}>+</button>
-                        </div>                    
+                      <legend>Create to-do</legend>                    
+                      <Input label="Name: " type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+                      <Input label="Done: " type="checkbox" name="done" id="done" checked={status} onChange={() => setStatus(!status)} />
+                      <div className="button">
+                        <button type="submit" onClick={(e) => handleCreateTask(e)}>+</button>
+                      </div>                    
                     </fieldset>
-                </Form>
-                {state.tasks.length > 0 && <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />}
-                <MiniTimer timers={timers} />
-            </Route>
-            <Route path="/pomodoro">
+                  </Form>
+                  {state.tasks.length > 0 && (
+                    <Todo tasks={state.tasks} onTick={handleTick} onDelete={handleDeleteTask} />
+                  )}
+                  <MiniTimer timers={timers} />
+                </>
+              } 
+            />
+            <Route 
+              path="/pomodoro" 
+              element={
                 <Pomodoro reset={handleReset}>
-                    {timers.map(timer => <Timer key={timer.id} {...timer} resetTimer={resetTimer} handleTimer={handleTimer} />)}                     
+                  {timers.map(timer => (
+                    <Timer key={timer.id} {...timer} resetTimer={resetTimer} handleTimer={handleTimer} />
+                  ))}
                 </Pomodoro>
-            </Route>
-            <Route path="*">
-                <h1>Error 404</h1>
-            </Route>            
-        </Switch>
-        </main>
+              } 
+            />
+            <Route path="*" element={<h1>Error 404</h1>} />
+          </Routes>
+
+          </main>
         </>
     );
 }

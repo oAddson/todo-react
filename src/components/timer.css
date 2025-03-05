@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     flex: 1 0;
     max-width: 30%;
     min-height: 195px;
@@ -34,7 +34,7 @@
     background: none;
     border: none;
     flex: 1 0;
-    max-width: 80%;
+    max-width: inherit;
     box-shadow: 10px 5px 20px -10px #0e09098f, -5px -5px 20px -10px #d6d6d65c;
     cursor: pointer;
     padding: 10px;
